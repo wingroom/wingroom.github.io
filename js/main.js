@@ -12,6 +12,10 @@
     const upbutton3 = document.getElementById('up3');
     const text3 = document.getElementById('textbox3');
     const reset3 = document.getElementById('reset3');
+    const downbutton4 = document.getElementById('down4');
+    const upbutton4 = document.getElementById('up4');
+    const text4 = document.getElementById('textbox4');
+    const reset4 = document.getElementById('reset4');
 
     //ボタンが押されたらカウント減
     downbutton1.addEventListener('click', (event) => {
@@ -66,5 +70,24 @@
     //ボタンが押されたら0に戻る
     reset3.addEventListener('click', (event) => {
         text3.value = 0;
+    });
+
+    //ボタンが押されたらカウント減
+    downbutton4.addEventListener('click', (event) => {
+        //0以下にはならないようにする
+        if(text4.value >= 1){
+            text4.value--;
+        }
+    });
+
+    //ボタンが押されたらカウント増
+    upbutton4.addEventListener('click', (event) => {
+        text4.value++;
+        text1.value++;
+    });
+
+    //ボタンが押されたら0に戻る
+    reset4.addEventListener('click', (event) => {
+        text4.value = 0;
     });
 })();
