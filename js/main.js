@@ -41,6 +41,7 @@
     //ボタンが押されたらカウント増
     upbutton2.addEventListener('click', (event) => {
         text2.value++;
+        text1.value++;
     });
 
     //ボタンが押されたら0に戻る
@@ -59,6 +60,7 @@
     //ボタンが押されたらカウント増
     upbutton3.addEventListener('click', (event) => {
         text3.value++;
+        text1.value++;
     });
 
     //ボタンが押されたら0に戻る
