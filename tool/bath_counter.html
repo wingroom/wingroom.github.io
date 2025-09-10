@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex, nofollow">
+  <title>風呂さやカウンター</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-..."
+    crossorigin="anonymous" referrerpolicy="no-referrer" rel="stylesheet">
+
+
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      min-height: 100vh;
+      overflow-x: hidden;
+      font-family: sans-serif;
+      background-color: #f8f9fa;
+    }
+
+    .title {
+      background: linear-gradient(to right, #80c4f3, #878ef8);
+      color: white;
+      padding: 20px;
+      font-size: 22px;
+      text-align: center;
+    }
+
+    .controls {
+      margin: 20px auto;
+      text-align: center;
+    }
+
+    .counter-box {
+      position: relative;
+      background-color: white;
+      border: 2px solid #80c4f3;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 20px;
+      text-align: center;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .count-value {
+      font-size: 40px;
+      margin-bottom: 20px;
+    }
+
+    .counter-buttons {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .delete-btn {
+      position: absolute;
+      bottom: -10px;
+      right: -10px;
+      background-color: #adb5bd;
+      color: white;
+      border: none;
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      font-size: 16px;
+      line-height: 20px;
+      padding: 0;
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-gradient,
+    .decrement-btn {
+      padding: 10px 0;
+      font-size: 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      border: none;
+      color: white;
+      display: inline-block;
+      text-align: center;
+      text-decoration: none;
+      background-size: 200% auto;
+      background-position: center;
+      background: linear-gradient(to right, #80c4f3, #878ef8);
+    }
+
+    .btn-gradient:hover,
+    .decrement-btn:hover {
+      opacity: 0.85;
+      background-position: right center;
+    }
+
+    .decrement-btn {
+      border-radius: 6px;
+      font-weight: bold;
+      width: 45%;
+      padding: 6px 0;
+    }
+
+    .btn-gradient:active,
+    .decrement-btn:active,
+    .btn-gray:active {
+      transform: scale(0.97);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+    }
+
+    .btn-gray {
+      background-color: #6c757d;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      width: 45%;
+      padding: 6px 0;
+      cursor: pointer;
+      transition: background-color 0.2s ease, transform 0.1s ease;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .btn-gray:hover {
+      background-color: #868e96;
+    }
+
+    @keyframes fadeSlideInLeft {
+      0% {
+        opacity: 0;
+        transform: translateX(-50px);
+      }
+
+      100% {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    .counter-appear {
+      animation: fadeSlideInLeft 0.4s ease-out;
+    }
+
+    #all-decrement,
+    #all-increment,
+    #add-counter {
+      padding: 14px 0;
+      font-size: 20px;
+      height: 100px;
+    }
+
+    #active-counter-count {
+      font-size: 24px;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="title">風呂さやカウンター</div>
+
+  <div class="controls container">
+    <div class="row mb-3 align-items-center gx-2">
+      <div class="col-4">
+        <button id="all-decrement" class="btn-gradient w-100"><i class="fa fa-minus"></i></button>
+      </div>
+      <div class="col-4">
+        <button id="all-increment" class="btn-gray w-100"><i class="fa fa-plus"></i></button>
+      </div>
+      <div class="col-4">
+        <button id="add-counter" class="btn-gradient w-100">風呂さやか追加</button>
+      </div>
+    </div>
+    <div id="active-counter-count" class="mb-3 fw-bold text-center">有効風呂さやか: 0人</div>
+  </div>
+
+  <div class="container">
+    <div class="row" id="counter-area"></div>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script>
+    let counterId = 0;
+
+    function createCounterBox(id) {
+      return `
+        <div class="col-md-4" id="col-${id}">
+          <div class="counter-box" data-id="${id}">
+            <button class="delete-btn" data-id="${id}">×</button>
+            <div class="count-value" id="count-${id}">20</div>
+            <div class="counter-buttons">
+              <button class="decrement-btn" data-id="${id}"><i class="fa fa-minus"></i></button>
+              <button class="btn-gray" data-id="${id}"><i class="fa fa-plus"></i></button>
+            </div>
+          </div>
+        </div>
+      `;
+    }
+
+    function updateCounter(id, delta) {
+      const $count = $(`#count-${id}`);
+      let value = parseInt($count.text(), 10);
+      value += delta;
+      if (value < 0) value = 0;
+      if (value > 20) value = 20;
+      $count.text(value);
+    }
+
+    function updateActiveCounterCount() {
+      let count = 0;
+      $('.count-value').each(function () {
+        if (parseInt($(this).text(), 10) > 0) {
+          count++;
+        }
+      });
+      $('#active-counter-count').text(`有効風呂さやか: ${count}人`);
+    }
+
+    $(function () {
+      $('#add-counter').click(function () {
+        const $newBox = $(createCounterBox(counterId));
+        $newBox.addClass('counter-appear');
+        $('#counter-area').prepend($newBox);
+        setTimeout(() => {
+          $newBox.removeClass('counter-appear');
+        }, 400);
+
+        counterId++;
+        updateActiveCounterCount();
+      });
+
+      $('#counter-area').on('click', '.decrement-btn', function () {
+        const id = $(this).data('id');
+        updateCounter(id, -1);
+        updateActiveCounterCount();
+      });
+
+      $('#counter-area').on('click', '.btn-gray', function () {
+        const id = $(this).data('id');
+        updateCounter(id, +1);
+      });
+
+      $('#counter-area').on('click', '.delete-btn', function () {
+        const id = $(this).data('id');
+        $(`#col-${id}`).fadeOut(300, function () {
+          $(this).remove();
+          updateActiveCounterCount();
+        });
+      });
+
+      $('#all-decrement').click(function () {
+        $('.count-value').each(function () {
+          const id = $(this).attr('id').split('-')[1];
+          updateCounter(id, -1);
+        });
+        updateActiveCounterCount();
+      });
+
+      $('#all-increment').click(function () {
+        $('.count-value').each(function () {
+          const id = $(this).attr('id').split('-')[1];
+          updateCounter(id, +1);
+        });
+        updateActiveCounterCount();
+      });
+    });
+  </script>
+</body>
+
+</html>
